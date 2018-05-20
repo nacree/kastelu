@@ -6,7 +6,7 @@ import urllib2
 
 # store the temperature in the database
 def log_temperature(temp):
-	conn=sqlite3.connect('/home/nacre/Documents/tempPlotter/templog.db')
+	conn=sqlite3.connect('/home/nacre/kastelu/temp.db')
 	curs=conn.cursor()
 
 	curs.execute("INSERT INTO temps values(datetime('now'), (?))", (temp,))
@@ -30,7 +30,7 @@ def log_temp_online(temp):
     	print "General connection failure"
 
 
-ser = serial.Serial('/dev/ttyACM0', 9600)
+ser = serial.Serial('/dev/ttyAMA0', 9600) #ttyACM0
 
 counter = 0
 total   = 0
@@ -52,7 +52,7 @@ while True:
 			total   = 0
 
 			log_temperature(avg)
-			log_temp_online(avg)
+			#log_temp_online(avg)
 			# log_temperature2(temp)
 
 	else:

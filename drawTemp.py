@@ -19,7 +19,7 @@ def get_data_file(interval):
 
 def get_data(interval):
 
-    conn=sqlite3.connect('/home/nacre/Documents/tempPlotter/templog.db')
+    conn=sqlite3.connect('/home/nacre/kastelu/temp.db')
     curs=conn.cursor()
 
     if interval == None:
