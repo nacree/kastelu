@@ -2,6 +2,8 @@
 
 import numpy as np
 import sqlite3
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
@@ -25,7 +27,7 @@ def get_data(interval):
     if interval == None:
         curs.execute("SELECT * FROM temps")
     else:
-        curs.execute("SELECT DATETIME(timestamp, '+3 hours'),temp FROM temps WHERE timestamp>datetime('now','-%s hours')" % interval)
+        curs.execute("SELECT DATETIME(timestamp, '+3 hours'),temperature FROM temps WHERE timestamp>datetime('now','-%s hours')" % interval)
 
     rows=curs.fetchall()
 
@@ -37,10 +39,11 @@ def get_data(interval):
 data = get_data(24) # last 24h
 
 x = [datetime.strptime(row[0],"%Y-%m-%d %H:%M:%S") for row in data]
-y = [row[1] for row in data]
-
+y = zip(*data)[1]
 
 ## Print data
+
+plt.ioff()
 
 fig = plt.figure()
 
@@ -50,16 +53,23 @@ ax1.set_title("Parvekelampotila")
 ax1.set_xlabel('Aika')
 ax1.set_ylabel('Lampotila *C')
 
-ax1.set_xticks(x) # Tickmark + label at every plotted point
-ax1.xaxis.set_major_locator(mdates.HourLocator())
-ax1.xaxis.set_major_formatter(mdates.DateFormatter('%d/%m/%Y %H:%M'))
+#ax1.set_xticks(x) # Tickmark + label at every plotted point
+ax1.xaxis.set_minor_locator(mdates.HourLocator(byhour=range(0,24,3)))
+ax1.xaxis.set_major_locator(mdates.DayLocator())
+ax1.xaxis.set_minor_formatter(mdates.DateFormatter('%H:%M'))
+ax1.xaxis.set_major_formatter(mdates.DateFormatter('\n%d/%m/%Y'))
 
 ax1.plot_date(x, y, ls='-', marker="")
-ax1.grid(True)
 
-fig.autofmt_xdate(rotation=45)
+ax1.grid(b=True, which='major')
+ax1.grid(b=True, which='minor', linestyle='--')
+
+#fig.autofmt_xdate(rotation=70)
 fig.tight_layout()
 
-fig.show()
+#plt.setp(ax1.get_xticklabels(), rotation=45)
 
-plt.show()
+#fig.show()
+#plt.show()
+
+fig.savefig("/var/www/html/data/kuvaaja.png")
