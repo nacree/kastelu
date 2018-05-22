@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #!/usr/bin/python
 
 import numpy as np
@@ -31,8 +32,6 @@ def get_data_file(interval):
 ## Load data from DB
 
 def get_data(interval):
-
-    global stats
 
     conn=sqlite3.connect('/home/nacre/kastelu/temp.db')
     curs=conn.cursor()
@@ -77,9 +76,9 @@ fig = plt.figure()
 
 ax1 = fig.add_subplot(111)
 
-ax1.set_title("Parvekelampotila")
+ax1.set_title(u'Parvekelämpötila')
 ax1.set_xlabel('Aika')
-ax1.set_ylabel('Lampotila *C')
+ax1.set_ylabel(u'Lampotila °C')
 
 #ax1.set_xticks(x) # Tickmark + label at every plotted point
 ax1.xaxis.set_minor_locator(mdates.HourLocator(byhour=range(0,24,3)))
