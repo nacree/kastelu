@@ -8,6 +8,17 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
 
+def write_stats(stats):
+    avg  = stats[0]
+    last = stats[1]
+
+    with open("/var/www/html/data/stats.php", "w") as f:
+        f.write("<?php\n\n")
+        f.write("$avg  = array(\"{}\",{});\n".format(avg[0], avg[1] ))
+        f.write("$last = array(\"{}\",{});\n".format(last[0],last[1]))
+        f.write("\n\n?>\n")
+
+
 ## Read data from file
 def get_data_file(interval):
 	with open("plotdata.txt") as f:
@@ -21,6 +32,8 @@ def get_data_file(interval):
 
 def get_data(interval):
 
+    global stats
+
     conn=sqlite3.connect('/home/nacre/kastelu/temp.db')
     curs=conn.cursor()
 
@@ -30,6 +43,21 @@ def get_data(interval):
         curs.execute("SELECT DATETIME(timestamp, '+3 hours'),temperature FROM temps WHERE timestamp>datetime('now','-%s hours')" % interval)
 
     rows=curs.fetchall()
+
+    # fetch statistics
+    curs.execute("""SELECT datetime('now'),avg(temperature)
+                    FROM temps
+                    WHERE timestamp>datetime('now','-24 hours')
+                    UNION
+                    SELECT *
+                    FROM (
+                         SELECT timestamp,temperature
+                         FROM temps
+                         ORDER BY timestamp DESC
+                         LIMIT 1
+                    )""")
+    stats=curs.fetchall()
+    write_stats(stats)
 
     conn.close()
 
