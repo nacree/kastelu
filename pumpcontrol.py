@@ -15,7 +15,7 @@ def write_log(type,msg):
     conn=sqlite3.connect('/home/nacre/kastelu/temp.db')
     curs=conn.cursor()
 
-    curs.execute("INSERT INTO log values(datetime('now'), (?), (?))", (type, msg))
+    curs.execute("INSERT INTO log values(datetime('now', '+3 hours'), (?), (?))", (type, msg))
     print "{}: {}".format(type, msg)
 
     conn.commit()
