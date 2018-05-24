@@ -15,8 +15,8 @@ def write_stats(stats):
 
     with open("/var/www/html/data/stats.php", "w") as f:
         f.write("<?php\n\n")
-        f.write("$avg  = array(\"{}\",{});\n".format(avg[0], avg[1] ))
-        f.write("$last = array(\"{}\",{});\n".format(last[0],last[1]))
+        f.write("$avg  = array(\"{}\",{});\n".format(avg[1], avg[2] ))
+        f.write("$last = array(\"{}\",{});\n".format(last[1],last[2]))
         f.write("\n\n?>\n")
 
 
@@ -39,22 +39,23 @@ def get_data(interval):
     if interval == None:
         curs.execute("SELECT * FROM temps")
     else:
-        curs.execute("SELECT DATETIME(timestamp, '+3 hours'),temperature FROM temps WHERE timestamp>datetime('now','-%s hours')" % interval)
+        curs.execute("SELECT timestamp,temperature FROM temps WHERE timestamp>datetime('now','-%s hours')" % interval)
 
     rows=curs.fetchall()
 
     # fetch statistics
-    curs.execute("""SELECT datetime('now'),avg(temperature)
+    curs.execute("""SELECT 1,DATETIME(datetime('now', '+3 hours')),avg(temperature)
                     FROM temps
                     WHERE timestamp>datetime('now','-24 hours')
                     UNION
-                    SELECT *
+                    SELECT 2,*
                     FROM (
                          SELECT timestamp,temperature
                          FROM temps
                          ORDER BY timestamp DESC
                          LIMIT 1
-                    )""")
+                    )
+                    ORDER BY 1""")
     stats=curs.fetchall()
     write_stats(stats)
 

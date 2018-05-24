@@ -19,5 +19,7 @@ print "Avg 24h: <b>". round($avg[1], 2) ."</b> (". $avg[0]  .")<br />\n";
 
 <img src="data/kuvaaja.png" /><br /><br />
 
+<img src="data/kuva.jpg" /><br /><br />
+
 </body>
 </html>
