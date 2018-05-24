@@ -1,5 +1,15 @@
 import time
 import sqlite3
+import RPi.GPIO as GPIO
+import sys
+
+PIN=13
+
+# initialize GPIO
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(PIN, GPIO.OUT)
+GPIO.output(PIN, GPIO.LOW)
 
 def write_log(type,msg):
     conn=sqlite3.connect('/home/nacre/kastelu/temp.db')
@@ -35,12 +45,17 @@ def use_pump(secs):
     # use pump for x seconds
 
     write_log("START","pump started for {} seconds".format(secs))
+    GPIO.output(PIN, GPIO.HIGH)
 
     for i in range(secs):
-        print(".")
+        sys.stdout.write(".")
+        sys.stdout.flush()
         time.sleep(1)
+    else:
+        print
 
     write_log("STOP","pump stopped");
+    GPIO.output(PIN, GPIO.LOW)
 
 def get_pumptime(avg, last):
 
@@ -53,8 +68,6 @@ def get_pumptime(avg, last):
 #   x-xmin    ( T - Tmin)
 # --------- = ----------
 # xmax-xmin   (Tmax-Tmin)
-
-# x = (T-Tmin)(xmax-xmin)/(Tmax-Tmin) + xmin
 
     T = avg
     x = (T-Tmin)*(xmax-xmin)/(Tmax-Tmin) + xmin
