@@ -49,7 +49,7 @@ while True:
 
                 	if counter == 0: # first run
                 		saveTemp = round(total, 2)
-			elif counter >= 286: # every 5 minutes #59:
+			elif counter >= 200: # every 5 minutes
 				saveTemp = round(total / counter, 2)
 
                 	if saveTemp > -1:

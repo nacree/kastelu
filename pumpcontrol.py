@@ -27,7 +27,7 @@ def get_stats():
 
     curs.execute("""SELECT datetime('now'),avg(temperature)
                     FROM temps
-                    WHERE timestamp>datetime('now','-24 hours')
+                    WHERE timestamp>datetime('now','-21 hours')
                     UNION
                     SELECT *
                     FROM (
@@ -35,7 +35,7 @@ def get_stats():
                          FROM temps
                          ORDER BY timestamp DESC
                          LIMIT 1
-                    )""")
+                    )""") # -21h because +3h difference in stored timestamp
     stats=curs.fetchall()
     conn.close()
 

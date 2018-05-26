@@ -10,13 +10,17 @@ import matplotlib.dates as mdates
 from datetime import datetime
 
 def write_stats(stats):
-    avg  = stats[0]
+    avgt = stats[0]
     last = stats[1]
+    mint = stats[2]
+    maxt = stats[3]
 
     with open("/var/www/html/data/stats.php", "w") as f:
         f.write("<?php\n\n")
-        f.write("$avg  = array(\"{}\",{});\n".format(avg[1], avg[2] ))
+        f.write("$avg  = array(\"{}\",{});\n".format(avgt[1],avgt[2] ))
         f.write("$last = array(\"{}\",{});\n".format(last[1],last[2]))
+        f.write("$min  = array(\"{}\",{});\n".format(mint[1],mint[2]))
+        f.write("$max  = array(\"{}\",{});\n".format(maxt[1],maxt[2]))
         f.write("\n\n?>\n")
 
 
@@ -46,7 +50,7 @@ def get_data(interval):
     # fetch statistics
     curs.execute("""SELECT 1,DATETIME(datetime('now', '+3 hours')),avg(temperature)
                     FROM temps
-                    WHERE timestamp>datetime('now','-24 hours')
+                    WHERE timestamp>datetime('now','-21 hours')
                     UNION
                     SELECT 2,*
                     FROM (
@@ -55,6 +59,14 @@ def get_data(interval):
                          ORDER BY timestamp DESC
                          LIMIT 1
                     )
+                    UNION
+                    SELECT 3,DATETIME(datetime('now', '+3 hours')),min(temperature)
+                    FROM temps
+                    WHERE timestamp>datetime('now','-21 hours')
+                    UNION
+                    SELECT 4,DATETIME(datetime('now', '+3 hours')),max(temperature)
+                    FROM temps
+                    WHERE timestamp>datetime('now','-21 hours')
                     ORDER BY 1""")
     stats=curs.fetchall()
     write_stats(stats)

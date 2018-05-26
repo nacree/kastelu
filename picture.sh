@@ -9,4 +9,4 @@ if [[ -f ${kuva} ]]; then
     fi
 fi
 
-/usr/bin/raspistill -w 800 -h 600 -t 1 -o ${kuva}
+/usr/bin/raspistill -w 800 -h 600 -o ${kuva}
