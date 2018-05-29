@@ -25,17 +25,18 @@ def get_stats():
     conn=sqlite3.connect('/home/nacre/kastelu/temp.db')
     curs=conn.cursor()
 
-    curs.execute("""SELECT datetime('now'),avg(temperature)
+    curs.execute("""SELECT 1,datetime('now'),avg(temperature)
                     FROM temps
                     WHERE timestamp>datetime('now','-21 hours')
                     UNION
-                    SELECT *
+                    SELECT 2,*
                     FROM (
                          SELECT timestamp,temperature
                          FROM temps
                          ORDER BY timestamp DESC
                          LIMIT 1
-                    )""") # -21h because +3h difference in stored timestamp
+                    )
+                    ORDER BY 1""") # -21h because +3h difference in stored timestamp
     stats=curs.fetchall()
     conn.close()
 
