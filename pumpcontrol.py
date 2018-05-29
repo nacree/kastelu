@@ -74,14 +74,28 @@ def get_pumptime(avg, last):
 
     return int(x)
 
+def main(argv):
 
-stats = get_stats()
-avg   = stats[0][1]
-last  = stats[1][1]
+    if argv[0] == 'start':
+        write_log("START","pump started manually")
+        GPIO.output(PIN, GPIO.HIGH)
 
-write_log("STATS","avg={} last={}".format(avg,last))
+    elif argv[0] == 'stop':
+        write_log("STOP","pump stopped manually")
+        GPIO.output(PIN, GPIO.LOW)
 
-# control pump time
+    else:
 
-secs = get_pumptime(avg, last)
-use_pump(secs)
+        stats = get_stats()
+        avg   = stats[0][1]
+        last  = stats[1][1]
+
+        write_log("STATS","avg={} last={}".format(avg,last))
+
+        # control pump time
+
+        secs = get_pumptime(avg, last)
+        use_pump(secs)
+
+if __name__ == "__main__":
+   main(sys.argv[1:])
