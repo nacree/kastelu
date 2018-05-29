@@ -88,8 +88,8 @@ def main(argv):
     else:
 
         stats = get_stats()
-        avg   = stats[0][1]
-        last  = stats[1][1]
+        avg   = stats[0][2]
+        last  = stats[1][2]
 
         write_log("STATS","avg={} last={}".format(avg,last))
 
