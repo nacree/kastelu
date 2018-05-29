@@ -34,7 +34,7 @@ Last measurement: <?= $last[0] ?>, graph generated: <?= $avg[0] ?><br /><br />
 <?php
 $db = new SQLite3('/home/nacre/kastelu/temp.db');
 
-$results = $db->query("SELECT * from log where timestamp>datetime('now','-21 hours') order by timestamp asc limit 5");
+$results = $db->query("SELECT * from log where timestamp>datetime('now','-21 hours') order by timestamp asc limit 10");
 while ($row = $results->fetchArray()) {
     print $row[0] . " " .$row[1] . ": " . $row[2] . "<br />\n";
 }
