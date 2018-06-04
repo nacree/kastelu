@@ -13,7 +13,7 @@ test=$(ps aux | grep ${program} | grep -v grep | grep -v starter.sh)
 if [[ -z $test ]]
 then
     echo "starting program"
-    /usr/bin/python /home/nacre/kastelu/${program}.py & >> /home/nacre/kastelu/logs/${program}.log 2>&1
+    /usr/bin/python /home/nacre/kastelu/${program}.py $2 & >> /home/nacre/kastelu/logs/${program}.log 2>&1
 else
     echo "program rumming"
 fi
