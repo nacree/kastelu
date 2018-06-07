@@ -71,13 +71,16 @@ def get_pumptime(avg, last):
 # xmax-xmin   (Tmax-Tmin)
 
     T = avg
-    x = (T-Tmin)*(xmax-xmin)/(Tmax-Tmin) + xmin
+    x = (T-Tmin)*(xmax-xmin)/(Tmax-Tmin) + xmin + last
 
     return int(x)
 
 def main(argv):
 
-    if argv[0] == 'start':
+    if len(argv) == 0:
+        print "\nincorrect input: <empty>\nUsage: ./pumpcontrol start/stop/./<time>"
+
+    elif argv[0] == 'start':
         write_log("START","pump started manually")
         GPIO.output(PIN, GPIO.HIGH)
 
@@ -85,7 +88,7 @@ def main(argv):
         write_log("STOP","pump stopped manually")
         GPIO.output(PIN, GPIO.LOW)
 
-    else:
+    elif argv[0] == 'auto':
 
         stats = get_stats()
         avg   = stats[0][2]
@@ -97,6 +100,14 @@ def main(argv):
 
         secs = get_pumptime(avg, last)
         use_pump(secs)
+
+    else:
+        secs = argv[0]
+        if (secs.isdigit()):
+            use_pump(secs)
+        else:
+            print "\nincorrect input: {}\nUsage: ./pumpcontrol start/stop/./<time>".format(argv[0])
+
 
 if __name__ == "__main__":
    main(sys.argv[1:])
