@@ -9,11 +9,17 @@ import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from datetime import datetime
 
+avg = 0
+
 def write_stats(stats):
+    global avg
+
     avgt = stats[0]
     last = stats[1]
     mint = stats[2]
     maxt = stats[3]
+
+    avg = avgt[2]
 
     with open("/var/www/html/data/stats.php", "w") as f:
         f.write("<?php\n\n")
@@ -106,6 +112,9 @@ ax1.grid(b=True, which='minor', linestyle='--')
 
 #fig.autofmt_xdate(rotation=70)
 fig.tight_layout()
+
+# add avg as horizontal line
+ax1.axhline(y=avg, color='k', linestyle='--', linewidth=1)
 
 #plt.setp(ax1.get_xticklabels(), rotation=45)
 
