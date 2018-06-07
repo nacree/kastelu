@@ -71,7 +71,15 @@ def get_pumptime(avg, last):
 # xmax-xmin   (Tmax-Tmin)
 
     T = avg
-    x = (T-Tmin)*(xmax-xmin)/(Tmax-Tmin) + xmin + last
+    x = (T-Tmin)*(xmax-xmin)/(Tmax-Tmin) + xmin
+
+    if x < xmin:
+        x = xmin
+    elif x > xmax:
+        x = xmax
+
+    # add extra time
+    x = x + last
 
     return int(x)
 
