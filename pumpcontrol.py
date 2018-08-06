@@ -112,7 +112,7 @@ def main(argv):
     else:
         secs = argv[0]
         if (secs.isdigit()):
-            use_pump(secs)
+            use_pump(int(secs))
         else:
             print "\nincorrect input: {}\nUsage: ./pumpcontrol start/stop/./<time>".format(argv[0])
 
