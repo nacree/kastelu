@@ -14,7 +14,10 @@ def store_data(time, d):
     conn=sqlite3.connect(dbFile)
     curs=conn.cursor()
 
-    curs.execute("INSERT INTO data values((?),(?),(?),(?),(?),(?),(?),(?),(?),(?))", (time, d[15], d[17], d[19], d[3], d[5], d[7], d[9], d[11], d[13]))
+    curs.execute("INSERT INTO data values((?),(?),(?),(?),(?),(?),(?),(?),(?),(?));", (time, d[15], d[17], d[19], d[3], d[5], d[7], d[9], d[11], d[13]))
+
+#    curs.execute("INSERT INTO stats(param,valueText,valueInt,timestamp) values('uptime','17.8.2018 18:16',0,DATETIME(datetime('now', '+3 hours')))")
+    curs.execute("UPDATE stats SET valueText=(?), timestamp=DATETIME(datetime('now', '+3 hours')) where param='uptime';", (d[21],))
 
     # commit the changes
     conn.commit()
@@ -24,11 +27,16 @@ def processLine(line):
     global found
 
     if '/' in line:
-        print "Incorrect line!!!"
-        print line
-        return 0
+         line = line.replace('/', '0')
+#        print "Incorrect line!!!"
+#        print line
+#        return 0
 
-    l = line.replace(" ","").split(sep)
+#    l = line.replace(" ","").split(sep)
+    l = line.split(sep)
+    for a in range(len(l)):
+        if a < 20: # dont remove spaces from uptime field
+            l[a] = l[a].replace(" ","")
 
     date = datetime.strptime(' '.join(l[0:2]), "%Y-%m-%d %H:%M:%S")
     print date

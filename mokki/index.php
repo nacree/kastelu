@@ -18,6 +18,11 @@ if (file_exists($file)) {
       }
     }
   }
+
+
+  $results = $db->query("SELECT * from stats");
+  $row = $results->fetchArray();
+  printf("<b>%-12s</b>: %s\n", "uptime", $row['valueText']);
 }
 ?>
 
@@ -28,3 +33,4 @@ if (file_exists($file)) {
 <img src="/data/mokki_rain.png" alt="." />
 <img src="/data/mokki_humi.png" alt="." />
 <img src="/data/mokki_pres.png" alt="." />
+

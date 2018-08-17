@@ -14,3 +14,11 @@ create table data(
 );
 
 create table log(timestamp datetime primare key default current_timestamp, type text, message text);
+
+create table stats(
+  param        text primare key,
+  valueText    text,
+  valueInt     integer,
+  timestamp    lastUpdate
+);
+
