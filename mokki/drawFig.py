@@ -31,6 +31,17 @@ def get_data(interval):
 
     return rows
 
+def filterData(data):
+    d = list(data)
+
+    for i in range(len(d)):
+        if d[i] == 0:
+            if i > 0:
+                d[i] = d[i-1]
+
+    return d
+
+
 print("1 --- %s seconds ---" % (time.time() - start_time))
 
 data = get_data(24) # last 24h
@@ -38,12 +49,16 @@ data = get_data(24) # last 24h
 x = [datetime.strptime(row[0],"%Y-%m-%d %H:%M:%S") for row in data]
 
 tmp = zip(*data)
-y = tmp[1] # temperature
-w = tmp[2] # wind
-z1 = tmp[3] # rain
+y = filterData(tmp[1]) # temperature
+w = filterData(tmp[2]) # wind
+z1 = filterData(tmp[3]) # rain
 z2 = tmp[4] # rain intensity
-hu = tmp[5] # humidity
-pr = tmp[6] # pressure
+hu = filterData(tmp[5]) # humidity
+pr = filterData(tmp[6]) # pressure
+
+z1 = list(z1)
+z10 = z1[0]
+z1 = np.array([a-z10 for a in z1])
 
 avg = mean(y) # avg temp
 
