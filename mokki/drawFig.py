@@ -24,7 +24,7 @@ def get_data(interval):
     if interval == None:
         curs.execute("SELECT * FROM data")
     else:
-        curs.execute("SELECT timestamp,temperature,wind_s,rain_a,rain_i,humidity,pressure FROM data WHERE timestamp>datetime('now','-%s hours')" % interval)
+        curs.execute("SELECT timestamp,temperature,wind_s,rain_a,rain_i,humidity,pressure,wind_gust FROM data WHERE timestamp>datetime('now','-%s hours')" % interval)
 
     rows=curs.fetchall()
     conn.close()
@@ -55,9 +55,10 @@ z1 = filterData(tmp[3]) # rain
 z2 = tmp[4] # rain intensity
 hu = filterData(tmp[5]) # humidity
 pr = filterData(tmp[6]) # pressure
+wg = filterData(tmp[7]) # wind gust
 
 z1 = list(z1)
-z10 = z1[0]
+z10 = min(z1) #z1[0]
 z1 = np.array([a-z10 for a in z1])
 
 avg = mean(y) # avg temp
@@ -107,6 +108,7 @@ for i in range(5):
         ax1.plot_date(x, y, ls='-', marker="")
     elif i == 1:
         ax1.plot_date(x, w, ls='-', marker="")
+        ax1.plot_date(x, wg, color='k', ls='-', marker="")
     elif i == 2:
         ax1.plot_date(x, z1, ls='-', marker="")
 #        ax1.plot_date(x, z2, color='k', ls='-', marker="")

@@ -14,7 +14,7 @@ def store_data(time, d):
     conn=sqlite3.connect(dbFile)
     curs=conn.cursor()
 
-    curs.execute("INSERT INTO data values((?),(?),(?),(?),(?),(?),(?),(?),(?),(?));", (time, d[15], d[17], d[19], d[3], d[5], d[7], d[9], d[11], d[13]))
+    curs.execute("INSERT INTO data values((?),(?),(?),(?),(?),(?),(?),(?),(?),(?),(?));", (time, d[15], d[17], d[19], d[3], d[5], d[7], d[9], d[11], d[13], d[23]))
 
 #    curs.execute("INSERT INTO stats(param,valueText,valueInt,timestamp) values('uptime','17.8.2018 18:16',0,DATETIME(datetime('now', '+3 hours')))")
     curs.execute("UPDATE stats SET valueText=(?), timestamp=DATETIME(datetime('now', '+3 hours')) where param='uptime';", (d[21],))

@@ -10,7 +10,8 @@ create table data(
   rain_i        float,
   rain_a        float,
   rain_d        float,
-  hail_a        float
+  hail_a        float,
+  wind_gust     float
 );
 
 create table log(timestamp datetime primare key default current_timestamp, type text, message text);
