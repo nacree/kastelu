@@ -24,7 +24,7 @@ def get_data(interval):
     if interval == None:
         curs.execute("SELECT * FROM data")
     else:
-        curs.execute("SELECT timestamp,temperature,wind_s,rain_a,rain_i,humidity,pressure,wind_gust FROM data WHERE timestamp>datetime('now','-%s hours')" % interval)
+        curs.execute("SELECT timestamp,temperature,wind_s,rain_a,rain_i,humidity,pressure,wind_gust FROM data WHERE timestamp>datetime('now','-%s hours','localtime')" % interval)
 
     rows=curs.fetchall()
     conn.close()
@@ -34,10 +34,21 @@ def get_data(interval):
 def filterData(data):
     d = list(data)
 
+    firstNotNull = 0
+    if d[0] > 0:
+        firstNotNull = d[0]
+    else:
+        for i in range(len(d)):
+            if d[i] > 0:
+                firstNotNull = d[i]
+                break
+
     for i in range(len(d)):
         if d[i] == 0:
             if i > 0:
                 d[i] = d[i-1]
+            else:
+                d[i] = firstNotNull
 
     return d
 
